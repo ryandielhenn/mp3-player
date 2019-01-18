@@ -7,4 +7,8 @@
 ### Compile: javac *.java
 ### Run: java Mp3Frame
 
+###Photos
+
+![MP3Player](home.png)
+![MP3Player](sortby.png)
 ![MP3Player](player.png)
