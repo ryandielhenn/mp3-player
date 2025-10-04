@@ -31,7 +31,7 @@ public class Process {
 			songList.add(song);
 		}catch(CannotReadException | ReadOnlyFileException | TagException | 
 			IOException | InvalidAudioFrameException | NullPointerException e ){
-			System.out.println(e.getStackTrace());
+			//System.out.println(e.getStackTrace());
 		}
 
 	}

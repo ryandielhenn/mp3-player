@@ -21,7 +21,7 @@ compile:
 
 # Run the program
 run: compile
-	$(JAVA) -cp $(CLASSPATH):$(BIN_DIR) Mp3Frame
+	$(JAVA) -cp $(CLASSPATH):$(BIN_DIR) Mp3Frame &
 
 # Clean compiled files
 clean:

@@ -17,6 +17,7 @@ public class Mp3Frame extends javax.swing.JFrame {
     private static final Color FG = new Color(211, 198, 170);      // #d3c6aa - text
     private static final Color GREEN = new Color(167, 192, 128);   // #a7c080 - accent
     private static final String UI_FONT = "Fira Code Nerd Font";
+    private Thread playThread;
     /**
      * Creates new form Mp3Frame
      */
@@ -278,7 +279,7 @@ public class Mp3Frame extends javax.swing.JFrame {
                 CardLayout card = (CardLayout)mainPanel.getLayout();
                 card.show(mainPanel, "panelTwo");
             }catch (FileNotFoundException fnf){
-                System.out.println(fnf.getStackTrace());
+                //System.out.println(fnf.getStackTrace());
             }
         }
 
@@ -365,14 +366,22 @@ public class Mp3Frame extends javax.swing.JFrame {
     private void playSong() {  
         stop();
 
+        if (playThread != null && playThread.isAlive()) {
+            try {
+                playThread.join(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         index = songListPane.getSelectedIndex();
         
         if (index == -1) {
-            System.out.println("No song selected");
+            //System.out.println("No song selected");
             return;
         }
         
-        Thread t = new Thread() {
+        playThread = new Thread() {
             public void run() {
                 isRunning = true;
                 
@@ -380,16 +389,11 @@ public class Mp3Frame extends javax.swing.JFrame {
                     try { 
                         MP3File fileAtIndex = songList.get(index);
                         String path = fileAtIndex.getAbsPath();
-                        
-                        System.out.println("Playing: " + path);
-                        
-                        // Use mpg123 to play the file
                         ProcessBuilder pb = new ProcessBuilder("mpg123", "-q", path);
                         currentProcess = pb.start();
-                        
                         // Wait for the process to finish
                         int exitCode = currentProcess.waitFor();
-                        System.out.println("Finished playing (exit code: " + exitCode + ")");
+                        //System.out.println("Finished playing (exit code: " + exitCode + ")");
                         
                     } catch(Exception e) {
                         e.printStackTrace();
@@ -401,7 +405,7 @@ public class Mp3Frame extends javax.swing.JFrame {
                 }
             }
         };
-        t.start();         
+        playThread.start();         
     }
 
     /**
