@@ -5,11 +5,18 @@
 ## Made in 2017
 
 ## Usage
-### Add Jars: export CLASSPATH=jl1.0.1.jar:jaudiotagger-2.2.6-SNAPSHOT.jar:.
-### Compile: javac *.java
-### Run: java Mp3Frame
+```
+# Compile the project
+make compile
 
-## Photos
+# Compile and run
+make run
+
+# Clean up compiled files
+make clean
+```
+
+## Screenshots
 
 ![MP3Player](home.png)
 ![MP3Player](sortby.png)
