@@ -10,6 +10,15 @@ make run
 
 # Clean up compiled files
 make clean
+
+# Install to ~/.local/bin/mp3
+make install
+
+# Run program
+mp3
+
+# Uninstall from ~/.local/bin
+make uninstall
 ```
 
 ## Screenshots

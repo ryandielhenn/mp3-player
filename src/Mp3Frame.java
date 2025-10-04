@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import javax.swing.DefaultListModel;
 import java.util.Collections;
 import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.JButton;
 
 /**
  * This class was partially created with the NetBeans IDE.
@@ -12,17 +15,23 @@ import java.awt.Color;
  * @author ryandielhenn
  */
 public class Mp3Frame extends javax.swing.JFrame {
-    private static final Color BG_1 = new Color(43, 51, 57);       // #2b3339 - main background
-    private static final Color BG_2 = new Color(57, 66, 72);       // Slightly lighter for buttons/inputs
-    private static final Color FG = new Color(211, 198, 170);      // #d3c6aa - text
-    private static final Color GREEN = new Color(167, 192, 128);   // #a7c080 - accent
-    private static final String UI_FONT = "Fira Code Nerd Font";
     private Thread playThread;
+    
+    private static final Color BG_1 = new Color(43, 51, 57);       // main background
+    private static final Color BG_2 = new Color(57, 66, 72);       // Slightly lighter for buttons/inputs
+    private static final Color FG = new Color(211, 198, 170);      // text
+    private static final Color GREEN = new Color(167, 192, 128);   // accent
+    private static final Color TEAL = new Color(128, 192, 192);
+    private static final String UI_FONT = "Fira Code Nerd Font";
+    private JLabel statusLabel;
     /**
      * Creates new form Mp3Frame
      */
     public Mp3Frame() {
         initComponents();
+        setTitle("Mp3Player");
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(screenSize.width - getWidth() - 4, 60);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -36,6 +45,8 @@ public class Mp3Frame extends javax.swing.JFrame {
      */
     private void initComponents() {
         // Initialize components
+        statusLabel = new JLabel("Ready");
+        statusLabel.setForeground(TEAL);
         mainPanel = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -144,7 +155,7 @@ public class Mp3Frame extends javax.swing.JFrame {
         songBtn.addActionListener(evt -> songBtnActionPerformed(evt));
         
         jLabel2.setFont(new java.awt.Font(UI_FONT, 0, 18));
-        jLabel2.setForeground(FG);
+        jLabel2.setForeground(GREEN);
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Sort By...");
         
@@ -190,7 +201,32 @@ public class Mp3Frame extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(songListPane);
-        
+       // Style the scrollbar
+        jScrollPane1.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = TEAL;
+                this.trackColor = BG_2;
+            }
+            
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new java.awt.Dimension(0, 0));
+                return button;
+            }
+        });
+
+    jScrollPane1.getVerticalScrollBar().setPreferredSize(new java.awt.Dimension(8, 0)); 
         playBtn.setText("Play");
         playBtn.setFont(new java.awt.Font(UI_FONT, 0, 13));
         playBtn.setBackground(BG_1);
@@ -253,14 +289,21 @@ public class Mp3Frame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addContainerGap())
+
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(menuBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusLabel)
                 .addGap(14, 14, 14))
         );
     }
@@ -279,11 +322,20 @@ public class Mp3Frame extends javax.swing.JFrame {
                 CardLayout card = (CardLayout)mainPanel.getLayout();
                 card.show(mainPanel, "panelTwo");
             }catch (FileNotFoundException fnf){
-                //System.out.println(fnf.getStackTrace());
+                setStatus("Path not found");
             }
+        } else {
+            setStatus("Invalid path: " + absPathTextField.getText());
         }
-
     }  
+
+    private void setStatus(String message) {
+        SwingUtilities.invokeLater(() -> {
+            if (statusLabel != null) {
+                statusLabel.setText(message);
+            }
+        });
+    }
 
     /**
      * Method to handle user pressing the Menu button
@@ -362,10 +414,8 @@ public class Mp3Frame extends javax.swing.JFrame {
     // Add this as a class field at the top with your other variables
     private java.lang.Process currentProcess = null;
 
-    // Your playSong method
     private void playSong() {  
         stop();
-
         if (playThread != null && playThread.isAlive()) {
             try {
                 playThread.join(500);
@@ -373,11 +423,10 @@ public class Mp3Frame extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-
         index = songListPane.getSelectedIndex();
         
         if (index == -1) {
-            //System.out.println("No song selected");
+            setStatus("No song selected");
             return;
         }
         
@@ -389,13 +438,24 @@ public class Mp3Frame extends javax.swing.JFrame {
                     try { 
                         MP3File fileAtIndex = songList.get(index);
                         String path = fileAtIndex.getAbsPath();
+                        String fileName = new File(path).getName();
+                        
+                        setStatus("Playing: " + fileName);
+                        
                         ProcessBuilder pb = new ProcessBuilder("mpg123", "-q", path);
                         currentProcess = pb.start();
-                        // Wait for the process to finish
+                        
                         int exitCode = currentProcess.waitFor();
-                        //System.out.println("Finished playing (exit code: " + exitCode + ")");
+                        
+                        // Only show status if we're still running
+                        if (isRunning && index < songList.size() - 1) {
+                            setStatus("Ready");
+                        } else if (isRunning) {
+                            setStatus("Playlist finished");
+                        }
                         
                     } catch(Exception e) {
+                        setStatus("Error playing song");
                         e.printStackTrace();
                     }
                     
@@ -407,7 +467,6 @@ public class Mp3Frame extends javax.swing.JFrame {
         };
         playThread.start();         
     }
-
     /**
     * Method to handle user pressing the Stop button
     */

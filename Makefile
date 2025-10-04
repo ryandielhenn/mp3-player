@@ -1,34 +1,44 @@
-# Compiler and flags
 JAVAC = javac
 JAVA = java
 SRC_DIR = src
 BIN_DIR = bin
 LIB_DIR = lib
 
-# Classpath
 CLASSPATH = $(LIB_DIR)/jl1.0.1.jar:$(LIB_DIR)/jaudiotagger-2.2.6-SNAPSHOT.jar
 
-# Source files
 SOURCES = $(wildcard $(SRC_DIR)/*.java)
 
-# Default target
 all: compile
 
-# Create bin directory and compile
 compile:
 	mkdir -p $(BIN_DIR)
 	$(JAVAC) -cp $(CLASSPATH) -d $(BIN_DIR) $(SOURCES)
 
-# Run the program
 run: compile
 	$(JAVA) -cp $(CLASSPATH):$(BIN_DIR) Mp3Frame &
 
-# Clean compiled files
 clean:
 	rm -rf $(BIN_DIR)
 	rm -f $(SRC_DIR)/*.class
 
-# Remove bin and all class files
 cleanall: clean
 
-.PHONY: all compile run clean cleanall
+PREFIX ?= $(HOME)/.local
+BINDIR = $(PREFIX)/bin
+SHAREDIR = $(PREFIX)/share/mp3player
+
+install: compile
+	mkdir -p $(BINDIR)
+	mkdir -p $(SHAREDIR)/lib
+	mkdir -p $(SHAREDIR)/bin
+	cp -r $(BIN_DIR)/* $(SHAREDIR)/bin/
+	cp $(LIB_DIR)/*.jar $(SHAREDIR)/lib/
+	echo '#!/bin/bash' > $(BINDIR)/mp3
+	echo 'java -cp $(SHAREDIR)/lib/jl1.0.1.jar:$(SHAREDIR)/lib/jaudiotagger-2.2.6-SNAPSHOT.jar:$(SHAREDIR)/bin Mp3Frame "$$@" > /dev/null 2>&1 &' >> $(BINDIR)/mp3
+	chmod +x $(BINDIR)/mp3
+	@echo "Installed to $(BINDIR)/mp3"
+
+uninstall:
+	rm -f $(BINDIR)/mp3
+	rm -rf $(SHAREDIR)
+	@echo "Uninstalled mp3"
