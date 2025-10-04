@@ -1,8 +1,4 @@
-# Code Written in Fall 2017
-
 # Mp3 Player
-
-## Made in 2017
 
 ## Usage
 ```
@@ -18,6 +14,16 @@ make clean
 
 ## Screenshots
 
-![MP3Player](home.png)
-![MP3Player](sortby.png)
-![MP3Player](player.png)
+### Searching for music in a directory
+Searches the given directory and all subdirectories for Mp3 files.
+Defaults to `$HOME/Music` (e.g.) `/home/ryan/Music`
+
+![Search](screenshots/search.png)
+
+### Sorting contents by song/artist
+
+![Sort By](screenshots/sortby.png)
+
+### Song selection, play, start, stop
+
+![Player](screenshots/player.png)
