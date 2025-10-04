@@ -31,7 +31,7 @@ public class Mp3Frame extends javax.swing.JFrame {
         initComponents();
         setTitle("Mp3Player");
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenSize.width - getWidth() - 4, 60);
+        setLocation(screenSize.width - getWidth() - 20, 85);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
