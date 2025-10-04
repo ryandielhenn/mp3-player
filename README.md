@@ -25,8 +25,7 @@ make uninstall
 
 ### Searching for music in a directory
 Searches the given directory and all subdirectories for Mp3 files.
-Defaults to `$HOME/Music` (e.g.) `/home/ryan/Music`
-
+Defaults to `$HOME/Music`
 ![Search](screenshots/search.png)
 
 ### Sorting contents by song/artist
