@@ -1,5 +1,22 @@
 # Mp3 Player
 
+## Dependencies
+
+### Runtime
+- `mpg123` - MP3 playback engine
+- `pulseaudio` or `pipewire-pulse` - Audio output
+
+### Build
+- `jdk-openjdk` (Java 17+)
+- JAR libraries (included in `lib/`):
+  - `jl1.0.1.jar`
+  - `jaudiotagger-2.2.6-SNAPSHOT.jar`
+
+### Installation (Arch Linux)
+```bash
+sudo pacman -S jdk-openjdk mpg123 pipewire pipewire-pulse
+```
+
 ## Usage
 ```
 # Compile the project

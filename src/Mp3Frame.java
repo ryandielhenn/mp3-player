@@ -442,7 +442,7 @@ public class Mp3Frame extends javax.swing.JFrame {
                         
                         setStatus("Playing: " + fileName);
                         
-                        ProcessBuilder pb = new ProcessBuilder("mpg123", "-q", path);
+                        ProcessBuilder pb = new ProcessBuilder("mpg123", "-o", "pulse", "-q", path);
                         currentProcess = pb.start();
                         
                         int exitCode = currentProcess.waitFor();
