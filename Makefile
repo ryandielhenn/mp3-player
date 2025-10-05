@@ -25,7 +25,7 @@ cleanall: clean
 
 PREFIX ?= $(HOME)/.local
 BINDIR = $(PREFIX)/bin
-SHAREDIR = $(PREFIX)/share/mp3player
+SHAREDIR = $(PREFIX)/share/mp3-player
 
 install: compile
 	mkdir -p $(BINDIR)
@@ -33,12 +33,12 @@ install: compile
 	mkdir -p $(SHAREDIR)/bin
 	cp -r $(BIN_DIR)/* $(SHAREDIR)/bin/
 	cp $(LIB_DIR)/*.jar $(SHAREDIR)/lib/
-	echo '#!/bin/bash' > $(BINDIR)/mp3
-	echo 'java -cp $(SHAREDIR)/lib/jl1.0.1.jar:$(SHAREDIR)/lib/jaudiotagger-2.2.6-SNAPSHOT.jar:$(SHAREDIR)/bin Mp3Frame "$$@" > /dev/null 2>&1 &' >> $(BINDIR)/mp3
-	chmod +x $(BINDIR)/mp3
-	@echo "Installed to $(BINDIR)/mp3"
+	echo '#!/bin/bash' > $(BINDIR)/mp3-player
+	echo 'java -cp $(SHAREDIR)/lib/jl1.0.1.jar:$(SHAREDIR)/lib/jaudiotagger-2.2.6-SNAPSHOT.jar:$(SHAREDIR)/bin Mp3Frame "$$@" > /dev/null 2>&1 &' >> $(BINDIR)/mp3-player
+	chmod +x $(BINDIR)/mp3-player
+	@echo "Installed to $(BINDIR)/mp3-player"
 
 uninstall:
-	rm -f $(BINDIR)/mp3
+	rm -f $(BINDIR)/mp3-player
 	rm -rf $(SHAREDIR)
-	@echo "Uninstalled mp3"
+	@echo "Uninstalled mp3-player"

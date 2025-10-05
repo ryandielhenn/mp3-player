@@ -32,7 +32,7 @@ make clean
 make install
 
 # Run program
-mp3
+mp3-player
 
 # Uninstall from ~/.local/bin
 make uninstall
