@@ -6,6 +6,7 @@ import javax.swing.DefaultListModel;
 import java.util.Collections;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 import javax.swing.JButton;
 
@@ -191,6 +192,34 @@ public class Mp3Frame extends javax.swing.JFrame {
         mainPanel.add(panelTwo, "panelTwo");
     }
 
+    // Helper method to style scrollbars
+    private void styleScrollBar(JScrollBar scrollBar, int width, int height) {
+        scrollBar.setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = TEAL;
+                this.trackColor = BG_2;
+            }
+            
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new java.awt.Dimension(0, 0));
+                return button;
+            }
+        });
+        scrollBar.setPreferredSize(new java.awt.Dimension(width, height));
+    }
+
     private void setupPlaylistPanel() {
         panelThree.setBackground(BG_1);
         
@@ -202,56 +231,8 @@ public class Mp3Frame extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(songListPane);
-        // Style the vertical and horizontal scrollbar
-        jScrollPane1.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = TEAL;
-                this.trackColor = BG_2;
-            }
-            
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return createZeroButton();
-            }
-            
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return createZeroButton();
-            }
-            
-            private JButton createZeroButton() {
-                JButton button = new JButton();
-                button.setPreferredSize(new java.awt.Dimension(0, 0));
-                return button;
-            }
-        });
-
-        jScrollPane1.getVerticalScrollBar().setPreferredSize(new java.awt.Dimension(8, 0)); 
-        jScrollPane1.getHorizontalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = TEAL;
-                this.trackColor = BG_2;
-            }
-            
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return createZeroButton();
-            }
-            
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return createZeroButton();
-            }
-            
-            private JButton createZeroButton() {
-                JButton button = new JButton();
-                button.setPreferredSize(new java.awt.Dimension(0, 0));
-                return button;
-            }
-        });
-        jScrollPane1.getHorizontalScrollBar().setPreferredSize(new java.awt.Dimension(0, 8));
+        styleScrollBar(jScrollPane1.getVerticalScrollBar(), 8, 0);
+        styleScrollBar(jScrollPane1.getHorizontalScrollBar(), 0, 8);
         playBtn.setText("Play");
         playBtn.setFont(new java.awt.Font(UI_FONT, 0, 13));
         playBtn.setBackground(BG_1);
