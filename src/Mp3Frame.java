@@ -29,9 +29,10 @@ public class Mp3Frame extends javax.swing.JFrame {
      */
     public Mp3Frame() {
         initComponents();
+        setResizable(false);
         setTitle("Mp3Player");
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenSize.width - getWidth() - 20, 85);
+        setLocation(screenSize.width - getWidth() - 20, 30);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -201,7 +202,7 @@ public class Mp3Frame extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(songListPane);
-       // Style the scrollbar
+        // Style the vertical and horizontal scrollbar
         jScrollPane1.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
@@ -226,7 +227,31 @@ public class Mp3Frame extends javax.swing.JFrame {
             }
         });
 
-    jScrollPane1.getVerticalScrollBar().setPreferredSize(new java.awt.Dimension(8, 0)); 
+        jScrollPane1.getVerticalScrollBar().setPreferredSize(new java.awt.Dimension(8, 0)); 
+        jScrollPane1.getHorizontalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = TEAL;
+                this.trackColor = BG_2;
+            }
+            
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+            
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new java.awt.Dimension(0, 0));
+                return button;
+            }
+        });
+        jScrollPane1.getHorizontalScrollBar().setPreferredSize(new java.awt.Dimension(0, 8));
         playBtn.setText("Play");
         playBtn.setFont(new java.awt.Font(UI_FONT, 0, 13));
         playBtn.setBackground(BG_1);
