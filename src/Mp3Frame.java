@@ -439,13 +439,11 @@ public class Mp3Frame extends javax.swing.JFrame {
                         MP3File fileAtIndex = songList.get(index);
                         String path = fileAtIndex.getAbsPath();
                         String fileName = new File(path).getName();
-                        
                         setStatus("Playing: " + fileName);
-                        
-                        ProcessBuilder pb = new ProcessBuilder("mpg123", "-o", "pulse", "-q", path);
+
+                        ProcessBuilder pb = new ProcessBuilder("mpg123", "-q", path);
                         currentProcess = pb.start();
-                        
-                        int exitCode = currentProcess.waitFor();
+                        currentProcess.waitFor();
                         
                         // Only show status if we're still running
                         if (isRunning && index < songList.size() - 1) {
