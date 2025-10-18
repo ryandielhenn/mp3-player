@@ -444,11 +444,15 @@ public class Mp3Frame extends javax.swing.JFrame {
                     try { 
                         MP3File fileAtIndex = songList.get(index);
                         String path = fileAtIndex.getAbsPath();
-                        String fileName = new File(path).getName();
-                        setStatus("Playing: " + fileName);
-
-                        ProcessBuilder pb = new ProcessBuilder("mpg123", "-q", path);
+                        String os = System.getProperty("os.name").toLowerCase();
+                        ProcessBuilder pb;
+                        if (os.contains("linux")) {
+                            pb = new ProcessBuilder("mpg123", "-o", "pulse", "-q", path);
+                        } else {
+                            pb = new ProcessBuilder("mpg123", "-o", path);
+                        }
                         currentProcess = pb.start();
+                        setStatus("Playing: " + fileAtIndex.getSongTitle());
                         currentProcess.waitFor();
                         
                         // Only show status if we're still running

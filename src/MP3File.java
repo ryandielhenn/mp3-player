@@ -63,7 +63,7 @@ public class MP3File {
 	}
 	
 	public String toString() {
-		return "Artist: " + this.artist + "| SongTitle: " + this.songTitle; 
+		return "Artist: " + (this.artist.isBlank() ? "unknown" : this.artist) + "| SongTitle: " + this.songTitle; 
 	}
 
 }
